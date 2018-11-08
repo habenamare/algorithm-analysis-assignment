@@ -98,10 +98,54 @@ dual_test_arrays = [
    []
 ]
 
+cucumber_test_arrays = [
+   [3, 8, 12],
+   [1, 3, 15],
+   [3, 4, 12, 11]
+]
+
+odd_dominated_test_arrays = [
+   [],
+   [1],
+   [2],
+   [3, 5, 7, 2],
+   [ 2, 1, 3, 4, 5, 6],
+   [ 2, 4, 6, 10, 12, 14]
+]
+
 
 # hollow array
 def is_hollow(a, length):
-   return "howllow function working"
+   if length < 3:
+      return False
+   
+   no_of_elements_before_first_zero = 0
+   zero_count_ended = False
+   zero_count_ended_at_index = 0;
+
+   first_zero_found = False
+   no_of_zeros_found = 0
+
+   for i in range(0, length):
+      if a[i] != 0 and not first_zero_found:
+         no_of_elements_before_first_zero += 1
+      elif a[i] != 0 and (first_zero_found and not zero_count_ended):
+         zero_count_ended = True
+         zero_count_ended_at_index = i
+      elif zero_count_ended and a[i] == 0:
+         return False 
+      elif a[i] == 0:
+         if not first_zero_found:
+            first_zero_found = True
+
+         no_of_zeros_found += 1
+   
+   # no_of_elements_after_last_zero = (length - zero_count_ended_at_index) if zero_count_ended else 0
+   no_of_elements_after_last_zero = 0
+   if zero_count_ended:
+      no_of_elements_after_last_zero = length - zero_count_ended_at_index
+
+   return no_of_zeros_found >= 3 and no_of_elements_before_first_zero == no_of_elements_after_last_zero
 
 # flip-flop array
 def is_flip_flop(a, length):
@@ -272,6 +316,42 @@ def is_dual(a, length):
    
    return True
 
+# cucumber array
+def is_cucumber(a, length):
+   if length < 2:
+      return False
+   
+   pair_found = False
+
+   for i in range(0, length):
+      for j in range(i+1, length):
+         if (a[j] + a[i]) == 15:
+            if pair_found:
+               return False
+            else:
+               pair_found = True
+
+   return pair_found
+
+def is_odd_dominated(a, length):
+   if length == 0:
+      return False
+   
+   no_of_evens = 0
+   no_of_odds = 0
+
+   for i in range(0, length):
+      if a[i] % 2 == 0:
+         no_of_evens += 1
+      else:
+         no_of_odds += 1
+   
+   if no_of_odds > no_of_evens:
+      return True
+   else:
+      return False
+
+
 testing_types = [
    "hollow",
    "flip-flop",
@@ -281,7 +361,9 @@ testing_types = [
    "centered",
    "layered",
    "daphne",
-   "dual"
+   "dual",
+   "cucumber",
+   "odd-dominated"
 ]
 
 ## testing
@@ -313,6 +395,12 @@ def test(test_for_type):
    elif test_for_type == "dual":
       for test_array in dual_test_arrays:
          print(is_dual(test_array, len(test_array)))
+   elif test_for_type == "cucumber":
+      for test_array in cucumber_test_arrays:
+         print(is_cucumber(test_array, len(test_array)))   
+   elif test_for_type == "odd-dominated":
+      for test_array in odd_dominated_test_arrays:
+         print(is_odd_dominated(test_array, len(test_array)))   
    else:
       print("incorrect testing type")
 
