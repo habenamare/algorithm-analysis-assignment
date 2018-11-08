@@ -109,8 +109,8 @@ odd_dominated_test_arrays = [
    [1],
    [2],
    [3, 5, 7, 2],
-   [ 2, 1, 3, 4, 5, 6],
-   [ 2, 4, 6, 10, 12, 14]
+   [2, 1, 3, 4, 5, 6],
+   [2, 4, 6, 10, 12, 14]
 ]
 
 
@@ -337,16 +337,16 @@ def is_odd_dominated(a, length):
    if length == 0:
       return False
    
-   no_of_evens = 0
-   no_of_odds = 0
+   evens_sum = 0
+   odds_sum = 0
 
    for i in range(0, length):
       if a[i] % 2 == 0:
-         no_of_evens += 1
+         evens_sum += a[i]
       else:
-         no_of_odds += 1
+         odds_sum += a[i]
    
-   if no_of_odds > no_of_evens:
+   if odds_sum > evens_sum:
       return True
    else:
       return False
